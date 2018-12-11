@@ -1,2 +1,3 @@
-# python-challenge
-A repository for the four Python Challenges in the Python homework for week 3.
+# __python-challenge__
+### This is the repository for the 03-Python homework, 
+### the Python challenges PyBank and PyPoll.
