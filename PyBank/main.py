@@ -8,58 +8,51 @@ base_path = 'C:/Users/dwigh/Desktop/python-challenge'
 resource_path = 'PyBank/Resources/budget_data.csv'
 file_path = os.path.join(base_path, resource_path)
 
-# The month_count value conditionally determines how the data is processed
-month_count = -1
+# Data processing is conditioned on the month count variable alues
+month_count = 0
 
 with open(file_path, newline='') as csvfile:
     csvrecord = csv.reader(csvfile, delimiter=',')
 
+    # Skip header row
+    next(csvrecord)
+
     for record in csvrecord:
 
-        # The first time through the loop the month count is set to zero
+        # Update the month count and the current amount
         month_count += 1
+        current_amt = int(record[1])
 
-        # The month count evaluates to False if it is zero, which
-        # implies the header row; skip it and go to the next record
-        if month_count:
+        # Initialize previous and total amount values the first month
+        if month_count == 1:
+            previous_amt = total_amt = current_amt
 
-            # The month count evaluates to True for values greater
-            # than zero, which implies data that can be processed
-            current_amt = int(record[1])
+        # Otherwise update the total and monthly difference values
+        else:
+            total_amt += current_amt
+            difference = current_amt - previous_amt
 
-            # Initialize previous and total amounts the first month
-            if month_count == 1:
-                previous_amt = total_amt = current_amt
+        # Initialize the remaining variable values the second month
+        if month_count == 2:
+            max_profit_date = max_loss_date = record[0]
+            max_profit = max_loss = difference
 
-            else:
-                total_amt += current_amt
+        # After the second month, check to see if the maximum monthly
+        # profit or loss variable values need to be updated
+        if month_count >= 3:
 
-                # Calculate montly amount changes after the first month
-                amt_change = current_amt - previous_amt
+            if difference > max_profit:
+                max_profit_date = record[0]
+                max_profit = difference
 
-                # Initialize the rest of the variables the second month
-                if month_count == 2:
-                    max_profit_date = max_loss_date = record[0]
-                    max_profit = max_loss = amt_change
+            if difference < max_loss:
+                max_loss_date = record[0]
+                max_loss = difference
 
-                # Check to see if the maximum monthly profit variable
-                # values need to be updated after the second month
-                elif amt_change > max_profit:
-                    max_profit_date = record[0]
-                    max_profit = amt_change
+            print(month_count, '  ', record[0], '  ', previous_amt, '  ',
+                  current_amt, '  ', difference, '  ', max_profit_date, '  ',
+                  max_profit, '  ', max_loss_date, '  ', max_loss, '  ',
+                  total_amt)
 
-                # Check to see if the maximum monthly loss variable
-                # values need to be updated after the second month
-                elif amt_change < max_loss:
-                    max_loss_date = record[0]
-                    max_loss = amt_change
-
-                # if month_count > 1:
-                #     print(month_count, '  ', record[0], '  ', total_amt, '  ',
-                #             previous_amt, '  ', current_amt, '  ', amt_change,
-                #             '  ', max_profit_date, '  ', max_profit, '  ',
-                #             max_loss_date, '  ', max_loss)
-
-                # This month's current amount will be next month's previous
-                # amount if there are more records to be read
-                previous_amt = current_amt
+        # This month's current amount will be next month's previous amount
+        previous_amt = current_amt
