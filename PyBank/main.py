@@ -26,21 +26,22 @@ import csv
 # Import os methods to simplify file path creation
 import os
 
+# Construct the input resource path
 base_path = 'C:/Users/dwigh/Desktop/python-challenge'
 resource_path = 'PyBank/Resources'
-
-#  the budget data from a record resource file
 input_path = os.path.join(base_path, resource_path, 'budget_data.csv')
 
-# Data processing is conditioned on the month count variable values
-month_count = 0
-
+#  Read the budget data from a record resource file
 with open(input_path, newline='') as csvfile:
     csvread = csv.reader(csvfile, delimiter=',')
+
+    # Data processing is conditioned on the month count variable values
+    month_count = 0
 
     # Skip header row since it has no data values
     next(csvread)
 
+    # Process the records in the data file
     for record in csvread:
 
         # Update the month count and the current amount
@@ -80,9 +81,10 @@ with open(input_path, newline='') as csvfile:
 # been read. For n months, the number of monthly amount changes is n-1
 avg_delta = (current_amt - first_amt) / (month_count - 1)
 
-# Write the results of the analysis to a report resource file
+# Contruct an output resource path
 output_path = os.path.join(base_path, resource_path, 'budget_analysis.txt')
 
+# Write the results of the analysis to a report resource file
 with open(output_path, 'w+') as txtfile:
     txtfile.write(' ' * 21 + "Financial Analysis" + '\n')
     txtfile.write('-' * 60 + '\n')
@@ -100,9 +102,10 @@ with open(output_path, 'w+') as txtfile:
                   "Greatest Monthly Decrease in Profit:",
                   max_decr_date, abs(max_decr)))
 
+# The input resource path to the previously created report resource file
 input_path = os.path.join(base_path, resource_path, 'budget_analysis.txt')
 
-# Check the report file to make sure it was correctly generated
+# Read the budget analysis report and print it to the terminal
 with open(input_path, 'r') as txtfile:
     report = txtfile.read()
     print(report)
