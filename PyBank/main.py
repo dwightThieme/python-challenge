@@ -1,19 +1,24 @@
 """
-This script analyzes a financial data set and returns the following statistics.
+This script analyzes a financial data set and returns the following statistics:
 
-1: The total number of months included in the dataset
-2: The net total amount of "Profit/Losses" over the entire period
-3: The average of the changes in "Profit/Losses" over the entire period
-4: The greatest incr in profits (date and amount) over the entire period
-5: The greatest decr in losses (date and amount) over the entire period
+1) The total number of months included in the dataset
+2) The net total amount of "Profit/Losses" over the entire period
+3) The average of the changes in "Profit/Losses" over the entire period
+4) The greatest incr in profits (date and amount) over the entire period
+5) The greatest decr in losses (date and amount) over the entire period
 
-The data is read once and stored in string and numeric variables; lists and
-dictionaries are not needed and not used. Also, since the first monthly change
-is amt2 - amt1, the second is amt3 - amt2, the third is amt4 - amt3, etc., all
-but the first and last monthly amounts cancel when summed together, reducing
-the sum of the monthly change in amounts to the first monthly amount
-the first monthly amount. This is far more computationally efficient than
-calculating every change in monthly amounts before summing them.
+All statistics are calculated concurrent with a single pass through the data.
+Only string and numeric type variables are used; mutable data types (lists
+and dictionaries) are not needed since all parameters are known in advance.
+When calculating the average change in monthly amounts, the monthly amount
+differences are not summed before dividing by their total number. Since the
+first monthly amount change is amt2 - amt1, the second amt3 - amt2, the third
+amt4 - amt3, etc., all but the first and last monthly amounts cancel when
+they are added together, reducing their sum to the first monthly amount
+subtracted from the last monthly amount. This method for summing the monthly
+amount changes is preferred since it requires only one operation no matter
+how many are added together. The standard computation would have required
+approximately twice as many operations as there were monthly amount changes.
 """
 
 # Import csv methods to read from/write to csv files
@@ -33,7 +38,7 @@ month_count = 0
 with open(input_path, newline='') as csvfile:
     csvread = csv.reader(csvfile, delimiter=',')
 
-    # Skip header row
+    # Skip header row since it has no data values
     next(csvread)
 
     for record in csvread:
@@ -72,7 +77,7 @@ with open(input_path, newline='') as csvfile:
         previous_amt = current_amt
 
 # The total number of months is not known until all the records have
-# been read. For n months, the number of monthly changes is n-1
+# been read. For n months, the number of monthly amount changes is n-1
 avg_delta = (current_amt - first_amt) / (month_count - 1)
 
 # Write the results of the analysis to a report resource file
@@ -81,11 +86,11 @@ output_path = os.path.join(base_path, resource_path, 'budget_analysis.txt')
 with open(output_path, 'w+') as txtfile:
     txtfile.write(' ' * 21 + "Financial Analysis" + '\n')
     txtfile.write('-' * 60 + '\n')
-    txtfile.write("{0:58}{1}".format(
+    txtfile.write("{0:57} {1}".format(
                   "Total Months:", month_count) + '\n')
-    txtfile.write("{0:49}${1:,}".format(
+    txtfile.write("{0:48} ${1:,}".format(
                   "Total Amount:", total_amt) + '\n')
-    txtfile.write("{0:53}-${1:,.0f}".format(
+    txtfile.write("{0:52} -${1:,.0f}".format(
                   "Average Monthly Change in Profit:",
                   abs(avg_delta)) + '\n')
     txtfile.write("{0:38}{1:10}  ${2:,}".format(
