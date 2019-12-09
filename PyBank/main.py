@@ -21,21 +21,23 @@ how many are added together. The standard computation would have required
 approximately twice as many operations as there were monthly amount changes.
 """
 
-# Import csv methods to read from/write to csv files
+# Import csv methods to read/write csv files
 import csv
-# Import os methods to simplify file path creation
+
+# Import os methods to construct valid file paths for the OS
 import os
 
-# Construct the input resource path
-base_path = 'C:/Users/dwigh/Desktop/python-challenge'
-resource_path = 'PyBank/Resources'
-input_path = os.path.join(base_path, resource_path, 'budget_data.csv')
+# Assemble the input file path
+base_path = 'C:/Users/dwigh'
+repo_path = 'Desktop/Repositories/python-challenge/PyBank'
+resource_path = 'Resources/budget_data.csv'
+input_path = os.path.join(base_path, repo_path, resource_path)
 
-#  Read the budget data from a record resource file
+# Open the budget data csv file for reading
 with open(input_path, newline='') as csvfile:
     csvread = csv.reader(csvfile, delimiter=',')
 
-    # Data processing is conditioned on the month count variable values
+    # Data processing is conditioned on the month count parameter
     month_count = 0
 
     # Skip header row since it has no data values
@@ -48,64 +50,72 @@ with open(input_path, newline='') as csvfile:
         month_count += 1
         current_amt = int(record[1])
 
-        # Initialize previous and total amount values the first month
+        # Initialize first and total amount parameters the first month
         if month_count == 1:
-            previous_amt = first_amt = total_amt = current_amt
+            first_amt = total_amt = current_amt
 
         # Otherwise update the total and monthly delta_amt values
+        # and initialize/update the remaining parameters
         else:
+
             total_amt += current_amt
             delta_amt = current_amt - previous_amt
 
-        # Initialize the remaining variable values the second month
-        if month_count == 2:
-            max_incr_date = max_decr_date = record[0]
-            max_incr = max_decr = delta_amt
+            # Initialize the remaining parameters the second month ...
+            if month_count == 2:
 
-        # After the second month, update the max profit stats if the latest
-        # monthly incr/decr is greater than the current max incr/decr amounts
-        if month_count > 2:
+                max_incr_date = max_decr_date = record[0]
+                max_incr = max_decr = delta_amt
 
-            if delta_amt > max_incr:
-                max_incr_date = record[0]
-                max_incr = delta_amt
+            # ... and after the second month, check to see if
+            # the max profit/loss stats need to be updated
+            else:
 
-            if delta_amt < max_decr:
-                max_decr_date = record[0]
-                max_decr = delta_amt
+                if delta_amt > max_incr:
 
-        # Next month's previous amount is this month's current amount
+                    max_incr_date = record[0]
+                    max_incr = delta_amt
+
+                if delta_amt < max_decr:
+
+                    max_decr_date = record[0]
+                    max_decr = delta_amt
+
+        # Set the previous amount for next month to this month's current amount
         previous_amt = current_amt
 
 # The total number of months is not known until all the records have
 # been read. For n months, the number of monthly amount changes is n-1
 avg_delta = (current_amt - first_amt) / (month_count - 1)
 
-# Contruct an output resource path
-output_path = os.path.join(base_path, resource_path, 'budget_analysis.txt')
+# Assemble the output file path
+resource_path = 'Resources/budget_analysis.txt'
+output_path = os.path.join(base_path, repo_path, resource_path)
 
-# Write the results of the analysis to a report resource file
+# Open the analysis results text file for writing
 with open(output_path, 'w+') as txtfile:
-    txtfile.write(' ' * 21 + "Financial Analysis" + '\n')
-    txtfile.write('-' * 60 + '\n')
-    txtfile.write("{0:57} {1}".format(
-                  "Total Months:", month_count) + '\n')
-    txtfile.write("{0:48} ${1:,}".format(
-                  "Total Amount:", total_amt) + '\n')
-    txtfile.write("{0:52} -${1:,.0f}".format(
-                  "Average Monthly Change in Profit:",
-                  abs(avg_delta)) + '\n')
-    txtfile.write("{0:38}{1:10}  ${2:,}".format(
-                  "Greatest Monthly Increase in Profit:",
-                  max_incr_date, max_incr) + '\n')
-    txtfile.write("{0:38}{1:10} -${2:,}".format(
-                  "Greatest Monthly Decrease in Profit:",
-                  max_decr_date, abs(max_decr)))
 
-# The input resource path to the previously created report resource file
-input_path = os.path.join(base_path, resource_path, 'budget_analysis.txt')
+    txtfile.write(f"{' Financial Analysis ':-^58}\n")
+
+    txtfile.write(f"{'Total Months:':46}{month_count:12}\n")
+
+    txtfile.write(f"{'Net Amount of Profits/Losses:':46}{total_amt:12,.0f}\n")
+
+    txtfile.write(f"{'Average Monthly Profit/Loss change:':46}")
+    txtfile.write(f"{avg_delta:12,.0f}\n")
+
+    txtfile.write(f"{'Greatest Monthly Increase in Profits:':38}")
+    txtfile.write(f"{max_incr_date:8}{max_incr:12,.0f}\n")
+
+    txtfile.write(f"{'Greatest Monthly Increase in Losses:':38}")
+    txtfile.write(f"{max_decr_date:8}{max_decr:12,.0f}\n")
+
+    txtfile.write(f"{'--':-^58}\n")
+
+# Set the input path to the output path to open the text file for reading
+input_path = output_path
 
 # Read the budget analysis report and print it to the terminal
 with open(input_path, 'r') as txtfile:
     report = txtfile.read()
-    print(report)
+    print(f"\n\n{report}\n")
