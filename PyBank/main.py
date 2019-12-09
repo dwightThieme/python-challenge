@@ -9,16 +9,16 @@ This script analyzes a financial data set and returns the following statistics:
 
 All statistics are calculated concurrent with a single pass through the data.
 Only string and numeric type variables are used; mutable data types (lists
-and dictionaries) are not needed since all parameters are known in advance.
+and dictionaries) are not needed since all variables are known in advance.
 When calculating the average change in monthly amounts, the monthly amount
 differences are not summed before dividing by their total number. Since the
 first monthly amount change is amt2 - amt1, the second amt3 - amt2, the third
 amt4 - amt3, etc., all but the first and last monthly amounts cancel when
 they are added together, reducing their sum to the first monthly amount
 subtracted from the last monthly amount. This method for summing the monthly
-amount changes is preferred since it requires only one operation no matter
-how many are added together. The standard computation would have required
-approximately twice as many operations as there were monthly amount changes.
+amount changes is preferred since it the calculation is the same no matter
+how many monthly amount changes there are while the usual way of findging
+averages requires more calculation the number of monthly changes increases.
 """
 
 # Import csv methods to read/write csv files
@@ -37,52 +37,58 @@ input_path = os.path.join(base_path, repo_path, resource_path)
 with open(input_path, newline='') as csvfile:
     csvread = csv.reader(csvfile, delimiter=',')
 
-    # Data processing is conditioned on the month count parameter
-    month_count = 0
-
-    # Skip header row since it has no data values
-    next(csvread)
-
     # Process the records in the data file
     for record in csvread:
 
-        # Update the month count and the current amount
-        month_count += 1
-        current_amt = int(record[1])
+        # If the current record is the header, no data can be read and
+        # month_count is the only variable that can be initialized
+        if record[0] == "Date":
+            month_count = 0
 
-        # Initialize first and total amount parameters the first month
-        if month_count == 1:
-            first_amt = total_amt = current_amt
-
-        # Otherwise update the total and monthly delta_amt values
-        # and initialize/update the remaining parameters
+        # Otherwise the current record has meaningful data to process
         else:
 
-            total_amt += current_amt
-            delta_amt = current_amt - previous_amt
+            # Since month_count and current amount are updated every month,
+            # they don't need to be incremented/read insided any conditional
+            # logic that depends on which month it is
+            month_count += 1
+            current_amt = int(record[1])
 
-            # Initialize the remaining parameters the second month ...
-            if month_count == 2:
+            # At least two months of data are needed to calculate monthly
+            # changes, so only first_amt and total_amt can be initialized
+            if month_count == 1:
+                first_amt = total_amt = current_amt
 
-                max_incr_date = max_decr_date = record[0]
-                max_incr = max_decr = delta_amt
-
-            # ... and after the second month, check to see if
-            # the max profit/loss stats need to be updated
+            # Monthly chages can be calculated after the first month, so
+            # initialize the remaining variables and update the rest
             else:
 
-                if delta_amt > max_incr:
+                total_amt += current_amt
+                delta_amt = current_amt - previous_amt
 
-                    max_incr_date = record[0]
-                    max_incr = delta_amt
+                # Initialize the remaining variables the second month ...
+                if month_count == 2:
 
-                if delta_amt < max_decr:
+                    max_incr_date = max_decr_date = record[0]
+                    max_incr = max_decr = delta_amt
 
-                    max_decr_date = record[0]
-                    max_decr = delta_amt
+                # ... and after the second month, check to see if
+                # the max profit/loss stats need to be updated
+                else:
 
-        # Set the previous amount for next month to this month's current amount
-        previous_amt = current_amt
+                    if delta_amt > max_incr:
+
+                        max_incr_date = record[0]
+                        max_incr = delta_amt
+
+                    if delta_amt < max_decr:
+
+                        max_decr_date = record[0]
+                        max_decr = delta_amt
+
+            # After the current record has been processed, set the
+            # previous amount to the current amount for next month
+            previous_amt = current_amt
 
 # The total number of months is not known until all the records have
 # been read. For n months, the number of monthly amount changes is n-1
@@ -99,7 +105,7 @@ with open(output_path, 'w+') as txtfile:
 
     txtfile.write(f"{'Total Months:':46}{month_count:12}\n")
 
-    txtfile.write(f"{'Net Amount of Profits/Losses:':46}{total_amt:12,.0f}\n")
+    txtfile.write(f"{'Total Net Amount of Profits:':46}{total_amt:12,.0f}\n")
 
     txtfile.write(f"{'Average Monthly Profit/Loss change:':46}")
     txtfile.write(f"{avg_delta:12,.0f}\n")
@@ -107,7 +113,7 @@ with open(output_path, 'w+') as txtfile:
     txtfile.write(f"{'Greatest Monthly Increase in Profits:':38}")
     txtfile.write(f"{max_incr_date:8}{max_incr:12,.0f}\n")
 
-    txtfile.write(f"{'Greatest Monthly Increase in Losses:':38}")
+    txtfile.write(f"{'Greatest Monthly Decrease in Profits:':38}")
     txtfile.write(f"{max_decr_date:8}{max_decr:12,.0f}\n")
 
     txtfile.write(f"{'--':-^58}\n")
