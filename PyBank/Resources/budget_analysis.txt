@@ -1,7 +1,14 @@
-------------------- Financial Analysis -------------------
-Total Months:                                           86
-Total Net Amount of Profits:                    38,382,578
-Average Monthly Profit/Loss change:                 -2,315
-Greatest Monthly Increase in Profits: Feb-2012   1,926,159
-Greatest Monthly Decrease in Profits: Sep-2013  -2,196,167
-----------------------------------------------------------
+
+
+
+
+            -------------- Financial Analysis --------------
+            Total Months:                                 86
+            Net Profits:                          38,382,578
+            Avg Change:                               -2,315
+            Max Increase:       Feb-2012           1,926,159
+            Max Decrease:       Sep-2013          -2,196,167
+            ------------------------------------------------
+
+
+

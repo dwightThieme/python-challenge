@@ -1,5 +1,11 @@
-print(f"\n\n\n{month[0]:9}{profit[0]:12,.0f}{'N/A':>12}\n")
+with open(input_path, newline='') as csvfile:
+    csv_obj = csv.reader(csvfile, delimiter=',')
+    csv_list = list(csv_obj)
 
-# for i in range(1, month_count):
-#     print(f"{month[i]:9}{profit[i]:12,.0f}{difference[i]:12,.0f}\n")
-# print("\n\n\n")
+print(f"  csv_read:\n\n         {csv_obj}\n\n")
+
+print("  csv_list head:\n\n  [")
+for record in range(10):
+    print("       ", csv_list[record])
+
+print("  ]\n\n\n\n")

@@ -94,34 +94,31 @@ with open(input_path, newline='') as csvfile:
 # been read. For n months, the number of monthly amount changes is n-1
 avg_delta = (current_amt - first_amt) / (month_count - 1)
 
+# Create the financial analysis report text
+report = f"\
+\n\n\n\n\
+            {' Financial Analysis ':-^48}\n\
+            {'Total Months:':24}{month_count:24,.0f}\n\
+            {'Net Profits:':24}{total_amt:24,.0f}\n\
+            {'Avg Change:':24}{avg_delta:24,.0f}\n\
+            {'Max Increase:':14}{max_incr_date:^20}{max_incr:14,.0f}\n\
+            {'Max Decrease:':14}{max_decr_date:^20}{max_decr:14,.0f}\n\
+            {'--':-^48}\
+\n\n\n\n"
+
 # Assemble the output file path
 resource_path = 'Resources/budget_analysis.txt'
 output_path = os.path.join(base_path, repo_path, resource_path)
 
 # Open the analysis results text file for writing
-with open(output_path, 'w+') as txtfile:
-
-    txtfile.write(f"{' Financial Analysis ':-^58}\n")
-
-    txtfile.write(f"{'Total Months:':46}{month_count:12}\n")
-
-    txtfile.write(f"{'Total Net Amount of Profits:':46}{total_amt:12,.0f}\n")
-
-    txtfile.write(f"{'Average Monthly Profit/Loss change:':46}")
-    txtfile.write(f"{avg_delta:12,.0f}\n")
-
-    txtfile.write(f"{'Greatest Monthly Increase in Profits:':38}")
-    txtfile.write(f"{max_incr_date:8}{max_incr:12,.0f}\n")
-
-    txtfile.write(f"{'Greatest Monthly Decrease in Profits:':38}")
-    txtfile.write(f"{max_decr_date:8}{max_decr:12,.0f}\n")
-
-    txtfile.write(f"{'--':-^58}\n")
+with open(output_path, 'w+') as textfile:
+    textfile.write(report)
 
 # Set the input path to the output path to open the text file for reading
 input_path = output_path
 
-# Read the budget analysis report and print it to the terminal
+# Get the budget analysis report and print it to the terminal
 with open(input_path, 'r') as txtfile:
     report = txtfile.read()
-    print(f"\n\n{report}\n")
+
+print(report)
