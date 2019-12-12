@@ -9,7 +9,7 @@ This script analyzes an election vote count data set and returns the following:
 
 All statistics are calculated concurrent with a single pass through the data.
 Since the variables are not known in advance, i.e., the names of the candidates
-who are up for election, a dictionary, that is, a mutable data type is used.
+who are up for election, mutable data types (lists and dictionaries) are used.
 """
 
 # Import csv and os libraries to read/write
@@ -47,11 +47,16 @@ with open(input_path, newline="") as csvfile:
         # candidate key and default vote (0) to the dictionary
         votes[candidate] = votes.get(candidate, 0) + 1
 
-results = sorted([[v, k] for k, v in votes.items()], reverse=True)
+# Find the total votes to calculate candidate percenatages
 total = sum(votes.values())
 
+# Construct a candidates/votes nested list so the results can be sorted
+results = sorted([[v, k] for k, v in votes.items()], reverse=True)
+
+# Format the sorted (in reverse order) list for the report
 lines = [f"{k + ':':12}{v:12,}{v/total * 100:11,.1f}%\n" for v, k in results]
 
+# Generate the report string text
 report = f"\
 {' Election Results ':^36}\n\
 {'--':-^36}\n\
