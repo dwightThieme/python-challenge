@@ -34,7 +34,7 @@ with open(input_path, newline="") as csvfile:
     next(csvread)
 
     # Initialize the vote count dictionary
-    results = {}
+    votes = {}
 
     # Loop through the remaining records
     for record in csvread:
@@ -45,12 +45,12 @@ with open(input_path, newline="") as csvfile:
         # Increment the candidate's count by 1. If this is the
         # first time the candidate has received a vote, add the
         # candidate key and default vote (0) to the dictionary
-        results[candidate] = results.get(candidate, 0) + 1
+        votes[candidate] = votes.get(candidate, 0) + 1
 
-winners = sorted([[v, k] for k, v in results.items()], reverse=True)
-total = sum(results.values())
+results = sorted([[v, k] for k, v in votes.items()], reverse=True)
+total = sum(votes.values())
 
-lines = [f"{k + ':':12}{v:12,}{v/total * 100:11,.1f}%\n" for v, k in winners]
+lines = [f"{k + ':':12}{v:12,}{v/total * 100:11,.1f}%\n" for v, k in results]
 
 report = f"\
 {' Election Results ':^36}\n\
@@ -59,7 +59,7 @@ report = f"\
 {'--':-^36}\n\
 {''.join(lines)}\
 {'--':-^36}\n\
-{'Winner:':12}{winners[0][1]:>24}\n\
+{'Winner:':12}{results[0][0]:12,}{results[0][1]:>12}\n\
 {'--':-^36}\n"
 
 print(f"\n\n\n\n{report}\n\n\n\n")
