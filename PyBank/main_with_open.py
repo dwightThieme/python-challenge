@@ -27,8 +27,8 @@ import csv
 # Import os methods to construct valid file paths for the OS
 import os
 
-# Assemble the output resource path. Include the base and repo
-# paths to allow for absolute as well as relative paths
+# Assemble the output resource path. Include the base and
+# repo paths to allow for both absolute and relative paths
 base_path = 'C:/Users/dwigh'
 repo_path = 'Desktop/Repositories/python-challenge/PyBank'
 resource_path = 'Resources/budget_data.csv'
@@ -107,20 +107,22 @@ report = f"\
             {'--':-^48}\
 \n\n\n\n"
 
-# Assemble the output resource path. Include the base and repo
-# paths to allow for absolute as well as relative paths
+# Assemble the output resource path. Include the base and
+# repo paths to allow for both absolute and relative paths
 resource_path = 'Resources/budget_analysis.txt'
 output_path = os.path.join(base_path, repo_path, resource_path)
 
-# Open the analysis results text file for writing
-with open(output_path, 'w+') as textfile:
+# Open the analysis resource text file and write the report to it
+with open(output_path, "w+") as textfile:
     textfile.write(report)
 
-# Set the input path to the output path to open the text file for reading
+# Check to see if the report has been properly created:
+
+# The input and output resource paths are the same
 input_path = output_path
 
-# Get the budget analysis report and print it to the terminal
-with open(input_path, 'r') as textfile:
+# Open report text file for reading and print it to the terminal
+with open(input_path, "r") as textfile:
     report = textfile.read()
 
 print(report)

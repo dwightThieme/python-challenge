@@ -26,8 +26,8 @@ approximately twice as many operations as there were monthly amount changes.
 import csv
 import os
 
-# Assemble the output resource path. Include the base and repo
-# paths to allow for absolute as well as relative paths
+# Assemble the output resource path. Include the base and
+# repo paths to allow for both absolute and relative paths
 base_path = 'C:/Users/dwigh'
 repo_path = 'Desktop/Repositories/python-challenge/PyBank'
 resource_path = 'Resources/budget_data.csv'
@@ -46,7 +46,7 @@ with open(input_path, newline="") as csvfile:
 
     # Skip header row since it has no data values and
     # read the next record
-    next(csvread)
+    header = next(csvread)
     record = next(csvread)
 
     # Get the current amount and initialize all variables dependent
@@ -117,21 +117,21 @@ report = f"\
             {'--':-^48}\
 \n\n\n\n"
 
-# Assemble the output resource path. Include the base and repo
-# paths to allow for absolute as well as relative paths
+# Assemble the output resource path. Include the base and
+# repo paths to allow for both absolute and relative paths
 resource_path = 'Resources/budget_analysis.txt'
 output_path = os.path.join(base_path, repo_path, resource_path)
 
-# Write the results of the analysis to a report resource file
+# Open the analysis resource text file and write the report to it
 with open(output_path, "w+") as textfile:
     textfile.write(report)
 
 # Check to see if the report has been properly created:
 
-# The input and output resource path to the created report are the same
+# The input and output resource paths are the same
 input_path = output_path
 
-# Open the budget analysis report for reading and print it to the terminal
+# Open report text file for reading and print it to the terminal
 with open(input_path, "r") as textfile:
     report = textfile.read()
 
