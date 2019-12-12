@@ -16,7 +16,7 @@ input_path = os.path.join(base_path, repo_path, resource_path)
 with open(input_path, newline='') as csv_file:
 
     # Construct a list from the csv.reader object
-    csv_list = [csv.reader(csv_file, delimiter=',')]
+    csv_list = list(csv.reader(csv_file, delimiter=','))
 
 # Generate a list of valid data by stripping out the header
 data = csv_list[1:]
@@ -36,13 +36,13 @@ differences = [profits[i] - profits[i-1] for i in range(1, month_count)]
 avg_diff = avg(differences)
 
 # Find the maximum monthy increase and its index, then apply the
-# index to the months list to get the date of its occurance
+# index to the months list to get the date of its occurrence
 max_incr = max(differences)
 max_incr_index = differences.index(max_incr)
 max_incr_date = months[max_incr_index]
 
 # Find the maximum monthy decrease and its index, then apply the
-# index to the months list to get the date of its occurance
+# index to the months list to get the date of its occurrence
 max_decr = min(differences)
 max_decr_index = differences.index(max_decr)
 max_decr_date = months[max_decr_index]
