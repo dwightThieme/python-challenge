@@ -26,8 +26,8 @@ approximately twice as many operations as there were monthly amount changes.
 import csv
 import os
 
-# Assemble the input resource path. Include the base path
-# to allow for absolute as well as relative paths
+# Assemble the output resource path. Include the base and repo
+# paths to allow for absolute as well as relative paths
 base_path = 'C:/Users/dwigh'
 repo_path = 'Desktop/Repositories/python-challenge/PyBank'
 resource_path = 'Resources/budget_data.csv'
@@ -117,8 +117,8 @@ report = f"\
             {'--':-^48}\
 \n\n\n\n"
 
-# Assemble the output resource path. Include the base path
-# to allow for absolute as well as relative paths
+# Assemble the output resource path. Include the base and repo
+# paths to allow for absolute as well as relative paths
 resource_path = 'Resources/budget_analysis.txt'
 output_path = os.path.join(base_path, repo_path, resource_path)
 
@@ -132,7 +132,7 @@ with open(output_path, "w+") as textfile:
 input_path = output_path
 
 # Open the budget analysis report for reading and print it to the terminal
-with open(input_path, "r") as txtfile:
-    report = txtfile.read()
+with open(input_path, "r") as textfile:
+    report = textfile.read()
 
 print(report)

@@ -27,7 +27,8 @@ import csv
 # Import os methods to construct valid file paths for the OS
 import os
 
-# Assemble the input file path
+# Assemble the output resource path. Include the base and repo
+# paths to allow for absolute as well as relative paths
 base_path = 'C:/Users/dwigh'
 repo_path = 'Desktop/Repositories/python-challenge/PyBank'
 resource_path = 'Resources/budget_data.csv'
@@ -64,27 +65,27 @@ with open(input_path, newline='') as csvfile:
             else:
 
                 total_amt += current_amt
-                delta_amt = current_amt - previous_amt
+                amt_diff = current_amt - previous_amt
 
                 # Initialize the remaining variables the second month ...
                 if month_count == 2:
 
                     max_incr_date = max_decr_date = record[0]
-                    max_incr = max_decr = delta_amt
+                    max_incr = max_decr = amt_diff
 
                 # ... and after the second month, check to see if
                 # the max profit/loss stats need to be updated
                 else:
 
-                    if delta_amt > max_incr:
+                    if amt_diff > max_incr:
 
                         max_incr_date = record[0]
-                        max_incr = delta_amt
+                        max_incr = amt_diff
 
-                    if delta_amt < max_decr:
+                    if amt_diff < max_decr:
 
                         max_decr_date = record[0]
-                        max_decr = delta_amt
+                        max_decr = amt_diff
 
             # After the current record has been processed, set the
             # previous amount to the current amount for next month
@@ -92,7 +93,7 @@ with open(input_path, newline='') as csvfile:
 
 # The total number of months is not known until all the records have
 # been read. For n months, the number of monthly amount changes is n-1
-avg_delta = (current_amt - first_amt) / (month_count - 1)
+avg_diff = (current_amt - first_amt) / (month_count - 1)
 
 # Create the financial analysis report text
 report = f"\
@@ -100,13 +101,14 @@ report = f"\
             {' Financial Analysis ':-^48}\n\
             {'Total Months:':24}{month_count:24,.0f}\n\
             {'Net Profits:':24}{total_amt:24,.0f}\n\
-            {'Avg Change:':24}{avg_delta:24,.0f}\n\
+            {'Avg Change:':24}{avg_diff:24,.0f}\n\
             {'Max Increase:':14}{max_incr_date:^20}{max_incr:14,.0f}\n\
             {'Max Decrease:':14}{max_decr_date:^20}{max_decr:14,.0f}\n\
             {'--':-^48}\
 \n\n\n\n"
 
-# Assemble the output file path
+# Assemble the output resource path. Include the base and repo
+# paths to allow for absolute as well as relative paths
 resource_path = 'Resources/budget_analysis.txt'
 output_path = os.path.join(base_path, repo_path, resource_path)
 
@@ -118,7 +120,7 @@ with open(output_path, 'w+') as textfile:
 input_path = output_path
 
 # Get the budget analysis report and print it to the terminal
-with open(input_path, 'r') as txtfile:
-    report = txtfile.read()
+with open(input_path, 'r') as textfile:
+    report = textfile.read()
 
 print(report)
