@@ -44,26 +44,32 @@ with open(input_path, newline="") as csvfile:
 
         # Increment the candidate's count by 1. If this is the
         # first time the candidate has received a vote, add the
-        # candidate key and default vote (0) to the dictionary
+        # candidate key and default value (given by the second
+        # argument in the get() method), 0, to the dictionary.
         votes[candidate] = votes.get(candidate, 0) + 1
 
 # Find the total votes to calculate candidate percenatages
 total = sum(votes.values())
 
+# Sort the reversed key/value pairs by value in ascending
+# order. The winner key is the second entry, indexed by [1],
+# of the last item, which is accessed by the index [-1].
 winner = sorted([(v, k) for k, v in votes.items()])[-1][1]
 
 # Format the votes dictionary entries for the report
-lines = [f"{k + ':':12}{votes[k]:12,}{votes[k]/total * 100:11,.1f}%\n"
-         for k in votes]
+lines = [f"{k + ':':12}"
+         f"{votes[k]:12,}"
+         f"{votes[k]/total * 100:11,.2f}%\n"
+         for k in sorted(votes)]
 
 # Generate the report string text
 report = f"{' Election Results ':^36}\n"\
          f"{'--':-^36}\n"\
-         f"{'Total Votes:':12}{total:12,}{100:11,.1f}%\n"\
+         f"{'Total Votes:':12}{total:12,}{100:11,.2f}%\n"\
          f"{'--':-^36}\n"\
          f"{''.join(lines)}"\
          f"{'--':-^36}\n"\
          f"{'Winner:':12}{votes[winner]:12,}{winner:>12}\n"\
          f"{'--':-^36}\n"
 
-print(f"\n\n\n\n{report}\n\n\n\n")
+print(f"\n\n{report}\n\n")
