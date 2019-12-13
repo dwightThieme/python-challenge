@@ -30,7 +30,7 @@ profits = [int(row[1]) for row in data]
 net_profit = sum(profits)
 
 # Construct a list of monthly differences from the list of profits
-differences = [profits[i] - profits[i-1] for i in range(1, month_count)]
+differences = [curr - prev for curr, prev in zip(profits[1:], profits)]
 
 # Find the average monthly change in profits
 avg_diff = avg(differences)
