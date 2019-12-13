@@ -50,21 +50,20 @@ with open(input_path, newline="") as csvfile:
 # Find the total votes to calculate candidate percenatages
 total = sum(votes.values())
 
-# Construct a candidates/votes nested list so the results can be sorted
-results = sorted([[v, k] for k, v in votes.items()], reverse=True)
+winner = sorted([(v, k) for k, v in votes.items()])[-1][1]
 
-# Format the sorted (in reverse order) list for the report
-lines = [f"{k + ':':12}{v:12,}{v/total * 100:11,.1f}%\n" for v, k in results]
+# Format the votes dictionary entries for the report
+lines = [f"{k + ':':12}{votes[k]:12,}{votes[k]/total * 100:11,.1f}%\n"
+         for k in votes]
 
 # Generate the report string text
-report = f"\
-{' Election Results ':^36}\n\
-{'--':-^36}\n\
-{'Total Votes:':12}{total:12,}{100:11,.1f}%\n\
-{'--':-^36}\n\
-{''.join(lines)}\
-{'--':-^36}\n\
-{'Winner:':12}{results[0][0]:12,}{results[0][1]:>12}\n\
-{'--':-^36}\n"
+report = f"{' Election Results ':^36}\n"\
+         f"{'--':-^36}\n"\
+         f"{'Total Votes:':12}{total:12,}{100:11,.1f}%\n"\
+         f"{'--':-^36}\n"\
+         f"{''.join(lines)}"\
+         f"{'--':-^36}\n"\
+         f"{'Winner:':12}{votes[winner]:12,}{winner:>12}\n"\
+         f"{'--':-^36}\n"
 
 print(f"\n\n\n\n{report}\n\n\n\n")
