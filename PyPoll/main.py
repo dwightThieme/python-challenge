@@ -63,13 +63,13 @@ lines = [f"{k + ':':12}"
          for k in sorted(votes)]
 
 # Generate the report string text
-report = f"{' Election Results ':^36}\n"\
-         f"{'--':-^36}\n"\
-         f"{'Total Votes:':12}{total:12,}{100:11,.2f}%\n"\
-         f"{'--':-^36}\n"\
-         f"{''.join(lines)}"\
-         f"{'--':-^36}\n"\
-         f"{'Winner:':12}{votes[winner]:12,}{winner:>12}\n"\
+report = f"{' Election Results ':^36}\n"                    \
+         f"{'--':-^36}\n"                                   \
+         f"{'Total Votes:':12}{total:12,}{100:11,.2f}%\n"   \
+         f"{'--':-^36}\n"                                   \
+         f"{''.join(lines)}"                                \
+         f"{'--':-^36}\n"                                   \
+         f"{'Winner:':12}{votes[winner]:12,}{winner:>12}\n" \
          f"{'--':-^36}\n"
 
 print(f"\n\n{report}\n\n")

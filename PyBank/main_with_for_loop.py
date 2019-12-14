@@ -96,12 +96,12 @@ with open(input_path, newline='') as csvfile:
 avg_diff = (current_amt - first_amt) / (month_count - 1)
 
 # Create the financial analysis report text
-report = f"{' Financial Analysis ':-^48}\n"\
-         f"{'Total Months:':24}{month_count:24,.0f}\n"\
-         f"{'Net Profits:':24}{total_amt:24,.0f}\n"\
-         f"{'Avg Change:':24}{avg_diff:24,.0f}\n"\
-         f"{'Max Increase:':14}{max_incr_date:^20}{max_incr:14,.0f}\n"\
-         f"{'Max Decrease:':14}{max_decr_date:^20}{max_decr:14,.0f}\n"\
+report = f"{' Financial Analysis ':-^48}\n"                             \
+         f"{'Total Months:':24}{month_count:24,.0f}\n"                  \
+         f"{'Net Profits:':24}{total_amt:24,.0f}\n"                     \
+         f"{'Avg Change:':24}{avg_diff:24,.0f}\n"                       \
+         f"{'Max Increase:':14}{max_incr_date:^20}{max_incr:14,.0f}\n"  \
+         f"{'Max Decrease:':14}{max_decr_date:^20}{max_decr:14,.0f}\n"  \
          f"{'--':-^48}"
 
 # Assemble the output resource path. Include the base and
