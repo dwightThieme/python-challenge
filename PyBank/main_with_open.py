@@ -102,7 +102,7 @@ with open(input_path, newline="") as csvfile:
         previous_amt = current_amt
 
 # Once the total number of months is known, calculate the average montly
-# amont change. For n months, the number of monthly amount changes is n-1
+# amount change. For n months, the number of monthly amount changes is n-1
 avg_diff = (current_amt - first_amt) / (month_count - 1)
 
 # Create the financial analysis report text
