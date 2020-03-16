@@ -58,7 +58,7 @@ with open(input_path, newline='') as csvfile:
             # At least two months of data are needed to calculate monthly
             # changes, so only first_amt and total_amt can be initialized
             if month_count == 1:
-                first_amt = total_amt = current_amt
+                first_amt = total_amt = previous_amt = current_amt
 
             # Monthly chages can be calculated after the first month, so
             # initialize the remaining variables and update the rest

@@ -2,6 +2,6 @@
 Total Months:                                 86
 Net Profits:                          38,382,578
 Avg Change:                               -2,315
-Max Increase:       Jan-2012           1,926,159
-Max Decrease:       Aug-2013          -2,196,167
+Max Increase:       Feb-2012           1,926,159
+Max Decrease:       Sep-2013          -2,196,167
 ------------------------------------------------
