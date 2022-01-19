@@ -20,9 +20,9 @@ import os
 # Construct the input resource path. Include the base path
 # to allow for absolute as well as relative paths
 # repo paths to allow for both absolute and relative paths
-base_path = 'C:/Users/dwigh'
-repo_path = 'Desktop/Repositories/python-challenge/PyPoll'
-resource_path = 'Resources/election_data.csv'
+base_path = "C:/Users/dwigh"
+repo_path = "Desktop/Repositories/python-challenge/PyPoll"
+resource_path = "Resources/election_data.csv"
 input_path = os.path.join(base_path, repo_path, resource_path)
 
 # Open the election data csv file for reading
@@ -42,34 +42,55 @@ with open(input_path, newline="") as csvfile:
         # Get the candidate's name, which is a dictionary key
         candidate = str(record[2])
 
-        # Increment the candidate's count by 1. If this is the
-        # first time the candidate has received a vote, add the
-        # candidate key and default value (given by the second
-        # argument in the get() method), 0, to the dictionary.
+        # If this is the first the candidate has received a
+        # vote, the candidate key and the default value, 0
+        # (given by the second argument in the get() method)
+        # are added to the dictionary before incrementing the
+        # candidates vote count by 1
         votes[candidate] = votes.get(candidate, 0) + 1
 
-# Find the total votes to calculate candidate percenatages
+# Find the total number of votes
 total = sum(votes.values())
 
-# Sort the reversed key/value pairs by value in ascending
-# order. The winner key is the second entry, indexed by [1],
-# of the last item, which is accessed by the index [-1].
-winner = sorted([(v, k) for k, v in votes.items()])[-1][1]
+# Find the name key of the maximum value in the dictionary
+winner = max(votes, key=votes.get)
 
 # Format the votes dictionary entries for the report
-lines = [f"{k + ':':12}"
-         f"{votes[k]:12,}"
-         f"{votes[k]/total * 100:11,.2f}%\n"
-         for k in sorted(votes)]
+lines = [
+    f"{k + ':':12}" f"{votes[k]:12,}" f"{votes[k]/total * 100:11,.2f}%\n"
+    for k in sorted(votes)
+]
 
 # Generate the report string text
-report = f"{' Election Results ':^36}\n"                    \
-         f"{'--':-^36}\n"                                   \
-         f"{'Total Votes:':12}{total:12,}{100:11,.2f}%\n"   \
-         f"{'--':-^36}\n"                                   \
-         f"{''.join(lines)}"                                \
-         f"{'--':-^36}\n"                                   \
-         f"{'Winner:':12}{votes[winner]:12,}{winner:>12}\n" \
-         f"{'--':-^36}\n"
+report = (
+    f"{' Election Results ':^36}\n"
+    f"{'--':-^36}\n"
+    f"{'Total Votes:':12}{total:12,}{100:11,.2f}%\n"
+    f"{'--':-^36}\n"
+    f"{''.join(lines)}"
+    f"{'--':-^36}\n"
+    f"{'Winner:':12}{votes[winner]:12,}{winner:>12}\n"
+    f"{'--':-^36}\n"
+)
 
+# Assemble the output resource path. Include the base and
+# repo paths to allow for both absolute and relative paths
+resource_path = "Analysis/poll_analysis.txt"
+output_path = os.path.join(base_path, repo_path, resource_path)
+print(f"\n\n {output_path} \n\n")
+
+# Open the analysis resource text file and write the report to it
+with open(output_path, "w") as textfile:
+    textfile.write(report)
+
+# Check to see if the report exists and is properly formatted:
+# The input and output resource paths are the same ... but we
+# we strive for clarity!
+input_path = output_path
+
+# Open report text file for reading and print it to the terminal
+with open(input_path, "r") as textfile:
+    report = textfile.read()
+
+# And print it out to see if the information, formatting, etc. is correct
 print(f"\n\n{report}\n\n")

@@ -25,55 +25,26 @@ approximately twice as many operations as there were monthly amount changes.
 # csv files and simplify file path creation
 import csv
 import os
+from pathlib import Path as pt
+from unipath import Path as Pt
+
+budget_data = str(Pt.cwd().parent.child('Resources', 'budget_data.csv')).replace("\\", "/")
+
+print(f"\n\nThe budget data is in {budget_data}\n\n")
 
 # Assemble the output resource path. Include the base and
 # repo paths to allow for both absolute and relative paths
-# There are various ways to do this
-
-# Use the tradintional Windows '\' path separator first. If
-# the shell is set to Bash on a Windows machine, the path
-# strings must be prefaced with an 'r' (raw string) so that
-# the '\' is correctly interpreted as a path separator and
-# not the Bash (Linux) escape character, '\' (This is what
-# is causing the problem.) Alternatively, preface the Windows
-# path separator character with the Linux OS escape charater,
-# i.e., use '\\' instead of '\' (the uglier workaround, IMHO)
-
-base_path = r"C:\Users\dwigh"
-repo_path = r"Desktop\Repositories\python-challenge\PyBank"
-resource_path = r"Resources\budget_data.csv"
+base_path = 'C:/Users/dwigh'
+repo_path = 'Desktop/Repositories/python-challenge/PyBank'
+resource_path = 'Resources/budget_data.csv'
 input_path = os.path.join(base_path, repo_path, resource_path)
+print(f"\n\nThe input path is: {input_path}")
 
-# This the vanilla Windows path string ('\' path separator)
-# Note: Must specify a raw string! Do so with an 'r' prefix
-print(f"\nWindows OS Style: \n{input_path}")
+#  Open the resource file for reading
 
-# Easy way to switch out OS path separator characters
-input_path = input_path.replace("\\", "/")
+# with open(input_path, newline="") as csvfile:
 
-# Windows treats '/' as a valid separator character when found
-# in a path string, i.e., '/' is a univeral OS path separator
-print(f"\nUniversal OS Style: \n{input_path}")
-
-# Assemble the output resource path, this time
-# using the '/' as the path separator
-base_path = "C:/Users/dwigh"
-repo_path = "Desktop/Repositories/python-challenge/PyBank"
-resource_path = "Resources/budget_data.csv"
-input_path = os.path.join(base_path, repo_path, resource_path)
-
-# If '\' and '/' are used in the same path string, Windows
-# will recognize both as valid separator characters:
-print(f"\nMixed OS Style: \n{input_path}")
-
-# I usually replace all '\' with'/' to avoid OS path errors
-input_path = input_path.replace("\\", "/")
-print(f"\nMy Style: \n{input_path}")
-
-# Open the resource file for reading
-with open(input_path, newline="") as csvfile:
-
-    # with open(budget_data, newline="") as csvfile:
+with open(budget_data, newline="") as csvfile:
 
     csvread = csv.reader(csvfile, delimiter=",")
 
@@ -85,7 +56,7 @@ with open(input_path, newline="") as csvfile:
 
     # Skip header row since it has no data values and
     # read the next record
-    next(csvread)
+    header = next(csvread)
     record = next(csvread)
 
     # Get the current amount and initialize all variables dependent
@@ -145,19 +116,17 @@ with open(input_path, newline="") as csvfile:
 avg_diff = (current_amt - first_amt) / (month_count - 1)
 
 # Create the financial analysis report text
-report = (
-    f"{' Financial Analysis ':-^48}\n"
-    f"{'Total Months:':24}{month_count:24,.0f}\n"
-    f"{'Net Profits:':24}{total_amt:24,.0f}\n"
-    f"{'Avg Change:':24}{avg_diff:24,.0f}\n"
-    f"{'Max Increase:':14}{max_incr_date:^20}{max_incr:14,.0f}\n"
-    f"{'Max Decrease:':14}{max_decr_date:^20}{max_decr:14,.0f}\n"
-    f"{'--':-^48}"
-)
+report = f"{' Financial Analysis ':-^48}\n"                             \
+         f"{'Total Months:':24}{month_count:24,.0f}\n"                  \
+         f"{'Net Profits:':24}{total_amt:24,.0f}\n"                     \
+         f"{'Avg Change:':24}{avg_diff:24,.0f}\n"                       \
+         f"{'Max Increase:':14}{max_incr_date:^20}{max_incr:14,.0f}\n"  \
+         f"{'Max Decrease:':14}{max_decr_date:^20}{max_decr:14,.0f}\n"  \
+         f"{'--':-^48}"
 
 # Assemble the output resource path. Include the base and
 # repo paths to allow for both absolute and relative paths
-resource_path = "Analysis/budget_analysis.txt"
+resource_path = 'Resources/budget_analysis.txt'
 output_path = os.path.join(base_path, repo_path, resource_path)
 
 # Open the analysis resource text file and write the report to it
@@ -165,8 +134,8 @@ with open(output_path, "w") as textfile:
     textfile.write(report)
 
 # Check to see if the report exists and is properly formatted:
-# The input and output resource paths are the same ... but we
-# we strive for clarity!
+
+# The input and output resource paths are the same
 input_path = output_path
 
 # Open report text file for reading and print it to the terminal
