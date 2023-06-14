@@ -6,22 +6,11 @@ from statistics import mean as avg
 import os
 import csv
 
-# Assemble the output resource path. Include the base and
-# repo paths to allow for both absolute and relative paths
-base_path = r"C:\Users\dwigh"
-repo_path = r"Desktop\Repositories\python-challenge\PyBank"
-resource_path = r"Resources\budget_data.csv"
-input_path = os.path.join(base_path, repo_path, resource_path)
+# Assemble the input csv file path, starting from the cwd
+input_path = os.path.join(os.path.dirname(__file__), "Resources", "budget_data.csv")
 
-print(f"\n\nWindows style input path -> \n{input_path}")
-
-# Unix-style path separators are valid in _all_ environments
-input_path = input_path.replace("\\", "/")
-
-print(f"\nUnix style input path -> \n{input_path}")
-
-with open(input_path, newline="") as csv_file:
-
+# Open the budget_data csv file for reading
+with open(input_path, encoding="utf-8", newline="") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=",")
 
     # Don't include the csv file header in the data
@@ -64,13 +53,11 @@ report = (
     f"{'--':-^48}"
 )
 
-# Assemble the output resource path. Include the base and
-# repo paths to allow for both absolute and relative paths
-resource_path = "Analysis/budget_analysis.txt"
-output_path = os.path.join(base_path, repo_path, resource_path)
+# Assemble the output text file path, starting from the cwd
+output_path = os.path.join(os.path.dirname(__file__), "Analysis", "budget_analysis.txt")
 
-# Open the analysis resource text file and write the report to it
-with open(output_path, "w") as textfile:
+# Open the budget_analysis text file and write the report to it
+with open(output_path, "w", encoding="utf-8") as textfile:
     textfile.write(report)
 
 # Check to see if the report exists and is properly formatted:
@@ -78,31 +65,8 @@ with open(output_path, "w") as textfile:
 # we strive for clarity!
 input_path = output_path
 
-# Open report text file for reading and print it to the terminal
-with open(input_path, "r") as textfile:
+# Open the report text file for reading and print it to the terminal
+with open(input_path, "r", encoding="utf-8") as textfile:
     report = textfile.read()
 
 print(f"\n\n{report}\n\n")
-
-# amounts = []
-# for record in csv_data:
-#     amounts.append(int(row[1]))
-# for i in range(1, len(months)):
-#     print(
-#         f"{amounts[i]:14,.0f}"
-#         f"{amounts[i-1]:14,.0f}"
-#         f"{(amounts[i]-amounts[i-1]):14,.0f}"
-#         f"{months[i]:>14}"
-#     )
-# count = len(months)
-# previous_month_amounts = amounts[:count]
-# current_month_amounts = amounts[1:]
-# differences = []
-# for i in range(len(current_month_amounts)):
-#     differences.append(current_month_amounts[i] - previous_month_amounts[i])
-# for diffs in differences:
-#     print(f"{diffs:14,.0f}")
-# print(differences)
-# for row in csv_data:
-#     print(f"{row[0]:8}  {int(row[1]):14,.0f}")
-# print(csv_data)

@@ -27,26 +27,15 @@ import csv
 # Import os methods to construct valid file paths for the OS
 import os
 
-# Assemble the output resource path. Include the base and
-# repo paths to allow for both absolute and relative paths
-base_path = "C:/Users/dwigh"
-repo_path = "Desktop/Repositories/python-challenge/PyBank"
-resource_path = "Resources/budget_data.csv"
-input_path = os.path.join(base_path, repo_path, resource_path)
+# Assemble the input the csv file path, starting from the cwd
+input_path = os.path.join(os.path.dirname(__file__), "Resources", "budget_data.csv")
 
-print(f"\n\nThe input path is: {input_path}")
-
-input_path = input_path.replace("\\", "/")
-
-print(f"\n\nThe input path is: {input_path}")
-
-# Open the budget data csv file for reading
-with open(input_path, newline="") as csvfile:
+# Open the budget_data csv file for reading
+with open(input_path, encoding="utf-8", newline="") as csvfile:
     csvread = csv.reader(csvfile, delimiter=",")
 
     # Process the records in the data file
     for record in csvread:
-
         # If the current record is the header, no data can be read and
         # month_count is the only variable that can be initialized
         if record[0] == "Date":
@@ -54,7 +43,6 @@ with open(input_path, newline="") as csvfile:
 
         # Otherwise the current record has meaningful data to process
         else:
-
             # Since month_count and current amount are updated every month,
             # they don't need to be incremented/read insided any conditional
             # logic that depends on which month it is
@@ -64,33 +52,28 @@ with open(input_path, newline="") as csvfile:
             # At least two months of data are needed to calculate monthly
             # changes, so only first_amt and total_amt can be initialized
             if month_count == 1:
-                first_amt = total_amt = current_amt
+                total_amt = first_amt = previous_amt = current_amt
 
             # Monthly chages can be calculated after the first month, so
             # initialize the remaining variables and update the rest
             else:
-
                 total_amt += current_amt
                 amt_diff = current_amt - previous_amt
                 current_month = record[0]
 
                 # Initialize the remaining variables the second month ...
                 if month_count == 2:
-
                     max_incr_date = max_decr_date = current_month
                     max_incr = max_decr = amt_diff
 
                 # After the second month, check to see if the max profit
                 # increase and decrease stats need to be updated
                 else:
-
                     if amt_diff > max_incr:
-
                         max_incr_date = current_month
                         max_incr = amt_diff
 
                     if amt_diff < max_decr:
-
                         max_decr_date = current_month
                         max_decr = amt_diff
 
@@ -118,13 +101,11 @@ report = (
     f"{'--':-^48}"
 )
 
-# Assemble the output resource path. Include the base and
-# repo paths to allow for both absolute and relative paths
-resource_path = "Analysis/budget_analysis.txt"
-output_path = os.path.join(base_path, repo_path, resource_path)
+# Assemble the output text file path, starting from the cwd
+output_path = os.path.join(os.path.dirname(__file__), "Analysis", "budget_analysis.txt")
 
-# Open the analysis resource text file and write the report to it
-with open(output_path, "w") as textfile:
+# Open the budget_analysis text file and write the report to it
+with open(output_path, "w", encoding="utf-8") as textfile:
     textfile.write(report)
 
 # Check to see if the report exists and is properly formatted:
@@ -133,8 +114,7 @@ with open(output_path, "w") as textfile:
 input_path = output_path
 
 # Open report text file for reading and print it to the terminal
-with open(input_path, "r") as textfile:
+with open(input_path, "r", encoding="utf-8") as textfile:
     report = textfile.read()
 
-# And print it out to see if the information, formatting, etc. is correct
 print(f"\n\n{report}\n\n")

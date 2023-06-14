@@ -66,13 +66,11 @@ input_path = os.path.join(base_path, repo_path, resource_path)
 # will recognize both as valid separator characters:
 print(f"\nMixed OS Style: \n{input_path}")
 
-# I usually replace all '\' with'/' to avoid OS path errors
-input_path = input_path.replace("\\", "/")
-print(f"\nMy Style: \n{input_path}")
+# Assemble the input csv file path, starting from the cwd
+input_path = os.path.join(os.path.dirname(__file__), "Resources", "budget_data.csv")
 
-# Open the resource file for reading
-with open(input_path, newline="") as csvfile:
-
+# Open the budget_data csv file for reading
+with open(input_path, encoding="utf-8", newline="") as csvfile:
     # with open(budget_data, newline="") as csvfile:
 
     csvread = csv.reader(csvfile, delimiter=",")
@@ -120,7 +118,6 @@ with open(input_path, newline="") as csvfile:
     # Loop through the remaining records once all
     # analysis variables have been initialized
     for record in csvread:
-
         month_count += 1
         current_amt = int(record[1])
         total_amt += current_amt
@@ -155,13 +152,11 @@ report = (
     f"{'--':-^48}"
 )
 
-# Assemble the output resource path. Include the base and
-# repo paths to allow for both absolute and relative paths
-resource_path = "Analysis/budget_analysis.txt"
-output_path = os.path.join(base_path, repo_path, resource_path)
+# Assemble the output text file path, starting from the cwd
+output_path = os.path.join(os.path.dirname(__file__), "Analysis", "budget_analysis.txt")
 
-# Open the analysis resource text file and write the report to it
-with open(output_path, "w") as textfile:
+# Open the budget_analysis text file and write the report to it
+with open(output_path, "w", encoding="utf-8") as textfile:
     textfile.write(report)
 
 # Check to see if the report exists and is properly formatted:
@@ -169,8 +164,8 @@ with open(output_path, "w") as textfile:
 # we strive for clarity!
 input_path = output_path
 
-# Open report text file for reading and print it to the terminal
-with open(input_path, "r") as textfile:
+# Open the report text file for reading and print it to the terminal
+with open(input_path, "r", encoding="utf-8") as textfile:
     report = textfile.read()
 
 print(f"\n\n{report}\n\n")
